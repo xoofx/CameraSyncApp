@@ -25,6 +25,16 @@ $ CameraSyncApp sync --output C:\MyOutputFolder --name MyPhone
 
 The tool organizes photos into folders based on the month they were taken. Each folder follows the naming convention `yyyy-MM-{name}`, where `yyyy` is the year, `MM` is the month, and `{name}` is a customizable identifier passed via the `--name` command line option.
 
+```
+Usage: CameraSyncApp sync [Options] --name NAME --output OUTPUT_FOLDER>
+
+  -h, -?, --help                    Show this message and exit
+  -o, --output=DIRECTORY            The output DIRECTORY..
+  -n, --name=VALUE                  The post-fix name appended to each folder created per month.
+      --dry-run                     Shows the file that would be copied with this sync but don't
+                                      perform the actual copy.
+```
+
 ## 👋 Credits
 
 This repository contains a fork of [MediaDevices](https://github.com/Bassman2/MediaDevices) library to make it compatible with NativeAOT.

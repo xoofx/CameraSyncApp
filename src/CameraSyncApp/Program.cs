@@ -9,20 +9,27 @@ using MediaDevices;
 using Spectre.Console;
 using XenoAtom.CommandLine;
 
-if (!OperatingSystem.IsWindows())
+namespace CameraSyncApp;
+
+internal static class Program
 {
-    AnsiConsole.MarkupLine("[red]This tool is only available on Windows[/]");
-    return 1;
-}
+    public static async Task<int> Main(string[] args)
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            AnsiConsole.MarkupLine("[red]This tool is only available on Windows[/]");
+            return 1;
+        }
 
-bool verbose = false;
+        bool verbose = false;
+        bool dryRun = false;
 
-string? namePostFix = null;
-string? targetFolder = null;
+        string? namePostFix = null;
+        string? targetFolder = null;
 
-const string _ = "";
+        const string _ = "";
 
-var commandApp = new CommandApp("CameraSyncApp", "CameraSyncApp is a lightweight command-line tool for Windows that simplifies syncing photos and videos.")
+        var commandApp = new CommandApp("CameraSyncApp", "CameraSyncApp is a lightweight command-line tool for Windows that simplifies syncing photos and videos.")
         {
             new CommandUsage("Usage: {NAME} [Options] command "),
             _,
@@ -38,6 +45,7 @@ var commandApp = new CommandApp("CameraSyncApp", "CameraSyncApp is a lightweight
                 new HelpOption(),
                 { "o|output=", "The output {DIRECTORY}..", v => targetFolder = v },
                 { "n|name=", "The post-fix name appended to each folder created per month.", v => namePostFix = v },
+                { "dry-run", "Shows the file that would be copied with this sync but don't perform the actual copy.", v => dryRun = v != null },
                 // Action for the commit command
                 (ctx, arguments) =>
                 {
@@ -97,19 +105,20 @@ var commandApp = new CommandApp("CameraSyncApp", "CameraSyncApp is a lightweight
                                 }
                             });
                             clock.Stop();
-                            AnsiConsole.MarkupLine($"Collected [yellow]{files.Count}[/] files in [yellow]{clock.Elapsed}s[/]");
+                            AnsiConsole.MarkupLine($"-> Collected [yellow]{files.Count}[/] files in [yellow]{clock.Elapsed}[/]s");
 
                             int totalCount = 0;
                             int processedCount = 0;
 
-                            AnsiConsole.Status().Start("Processing files", statusCtx =>
+                            clock.Restart();
+                            AnsiConsole.Status().Start(dryRun ? "Processing files (dryrun)" : "Processing files", statusCtx =>
                             {
                                 foreach (var file in files)
                                 {
                                     if (!file.LastWriteTime.HasValue)
                                     {
                                         AnsiConsole.WriteLine();
-                                        AnsiConsole.WriteLine($"Cannot process {file.FullName} - File does not have a datetime");
+                                        AnsiConsole.WriteLine($"-> Cannot process {file.FullName} - File does not have a datetime");
                                         continue;
                                     }
 
@@ -117,7 +126,7 @@ var commandApp = new CommandApp("CameraSyncApp", "CameraSyncApp is a lightweight
                                     if (lastWriteTime < keepUntil)
                                     {
                                         var folder = Path.Combine(targetFolder, $"{lastWriteTime.Year:0000}-{lastWriteTime.Month:00}-{namePostFix}");
-                                        if (!Directory.Exists(folder))
+                                        if (!dryRun && !Directory.Exists(folder))
                                         {
                                             Directory.CreateDirectory(folder);
                                         }
@@ -127,16 +136,23 @@ var commandApp = new CommandApp("CameraSyncApp", "CameraSyncApp is a lightweight
                                         var needToCopy = !destInfo.Exists || destInfo.Length != unchecked((long)file.Length) || destInfo.CreationTime != lastWriteTime || destInfo.LastWriteTime != lastWriteTime;
                                         if (needToCopy)
                                         {
-                                            statusCtx.Status($"Copying {file.FullName} to {dest} ({ByteSize.FromBytes(file.Length)})");
+                                            if (dryRun)
                                             {
-                                                using var outputStream = File.Create(dest);
-                                                file.CopyTo(outputStream);
+                                                AnsiConsole.MarkupLine($"Would copy [green]{Markup.Escape(file.FullName)}[/] to [green]{Markup.Escape(dest)}[/] ({ByteSize.FromBytes(file.Length)})");
                                             }
-                                            File.SetCreationTime(dest, lastWriteTime);
-                                            File.SetLastWriteTime(dest, lastWriteTime);
+                                            else
+                                            {
+                                                statusCtx.Status($"Copying {file.FullName} to {dest} ({ByteSize.FromBytes(file.Length)})");
+                                                {
+                                                    using var outputStream = File.Create(dest);
+                                                    file.CopyTo(outputStream);
+                                                }
+                                                File.SetCreationTime(dest, lastWriteTime);
+                                                File.SetLastWriteTime(dest, lastWriteTime);
 
-                                            processedCount++;
-                                            statusCtx.Refresh();
+                                                processedCount++;
+                                                statusCtx.Refresh();
+                                            }
                                         }
                                     }
 
@@ -144,7 +160,8 @@ var commandApp = new CommandApp("CameraSyncApp", "CameraSyncApp is a lightweight
                                 }
                             });
 
-                            AnsiConsole.MarkupLine($"New files: [yellow]{processedCount}[/] synced. Total files: [yellow]{totalCount}[/] synced");
+                            clock.Stop();
+                            AnsiConsole.MarkupLine($"-> Total files: [yellow]{totalCount}[/] synced. [yellow]{processedCount}[/] new files processed in [yellow]{clock.Elapsed}[/]s");
                         }
                         finally
                         {
@@ -182,7 +199,7 @@ var commandApp = new CommandApp("CameraSyncApp", "CameraSyncApp is a lightweight
                         try
                         {
                             var markupLine = $"Device `[green]{Markup.Escape(device.FriendlyName)}[/]` (Model: [green]{Markup.Escape(device.Model ?? string.Empty)}[/])";
-                            
+
                             if (!TryGetCameraFolder(device, out var cameraFolder, out var errorMessage))
                             {
                                 AnsiConsole.MarkupLine($"{markupLine}. [red]{Markup.Escape(errorMessage)}[/].");
@@ -208,49 +225,50 @@ var commandApp = new CommandApp("CameraSyncApp", "CameraSyncApp is a lightweight
             }
         };
 
-var width = Console.IsOutputRedirected ? 80 : Math.Max(80, Console.WindowWidth);
-var optionWidth = Console.IsOutputRedirected || width == 80 ? 29 : 36;
+        var width = Console.IsOutputRedirected ? 80 : Math.Max(80, Console.WindowWidth);
+        var optionWidth = Console.IsOutputRedirected || width == 80 ? 29 : 36;
 
-try
-{
-    return await commandApp.RunAsync(args, new CommandRunConfig(width, optionWidth));
-}
-catch (Exception ex)
-{
-    AnsiConsole.Foreground = Color.Red;
-    AnsiConsole.WriteLine($"Unexpected error: {ex.Message}");
-    AnsiConsole.ResetColors();
-    if (verbose)
-    {
-        AnsiConsole.WriteLine(ex.ToString());
+        try
+        {
+            return await commandApp.RunAsync(args, new CommandRunConfig(width, optionWidth));
+        }
+        catch (Exception ex)
+        {
+            AnsiConsole.Foreground = Color.Red;
+            AnsiConsole.WriteLine($"Unexpected error: {ex.Message}");
+            AnsiConsole.ResetColors();
+            if (verbose)
+            {
+                AnsiConsole.WriteLine(ex.ToString());
+            }
+            return 1;
+        }
+
     }
-    return 1;
-}
 
-
-
-static bool TryGetCameraFolder(MediaDevice device, [NotNullWhen(true)] out MediaDirectoryInfo? cameraFolder, [NotNullWhen(false)] out string? errorMessage)
-{
-    cameraFolder = null;
-    var rootFolder = device.GetRootDirectory();
-    var folders = rootFolder.EnumerateDirectories().ToList();
-    if (folders.Count == 0)
+    static bool TryGetCameraFolder(MediaDevice device, [NotNullWhen(true)] out MediaDirectoryInfo? cameraFolder, [NotNullWhen(false)] out string? errorMessage)
     {
-        errorMessage = "No folders found (Unlock the device maybe?)";
+        cameraFolder = null;
+        var rootFolder = device.GetRootDirectory();
+        var folders = rootFolder.EnumerateDirectories().ToList();
+        if (folders.Count == 0)
+        {
+            errorMessage = "No folders found (Unlock the device maybe?)";
+            return false;
+        }
+
+        foreach (var folder in folders)
+        {
+            var name = folder.Name;
+
+            if (device.TryGetDirectoryInfo($@"\{name}\DCIM\Camera", out cameraFolder))
+            {
+                errorMessage = null;
+                return true;
+            }
+        }
+
+        errorMessage = "No DCIM/Camera folder found";
         return false;
     }
-
-    foreach (var folder in folders)
-    {
-        var name = folder.Name;
-
-        if (device.TryGetDirectoryInfo($@"\{name}\DCIM\Camera", out cameraFolder))
-        {
-            errorMessage = null;
-            return true;
-        }
-    }
-
-    errorMessage = "No DCIM/Camera folder found";
-    return false;
 }
