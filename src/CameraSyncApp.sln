@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CameraSyncApp", "CameraSyncApp\CameraSyncApp.csproj", "{DCBBBB04-6E28-4E06-9B4C-1CB9B2C5AABD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CameraSyncApp.Tests", "CameraSyncApp.Tests\CameraSyncApp.Tests.csproj", "{CB6D7E43-680B-4EDD-BAE5-08CED7F3C4B2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BBC4B16D-083F-47E6-BFAE-9064E600F230}"
+	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+		..\.github\workflows\ci.yml = ..\.github\workflows\ci.yml
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		dotnet-releaser.toml = dotnet-releaser.toml
+		global.json = global.json
+		..\license.txt = ..\license.txt
+		..\readme.md = ..\readme.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaDevices", "MediaDevices\MediaDevices.csproj", "{79CC8203-A214-46EE-9F3E-65C120000816}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DCBBBB04-6E28-4E06-9B4C-1CB9B2C5AABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCBBBB04-6E28-4E06-9B4C-1CB9B2C5AABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCBBBB04-6E28-4E06-9B4C-1CB9B2C5AABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCBBBB04-6E28-4E06-9B4C-1CB9B2C5AABD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB6D7E43-680B-4EDD-BAE5-08CED7F3C4B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB6D7E43-680B-4EDD-BAE5-08CED7F3C4B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB6D7E43-680B-4EDD-BAE5-08CED7F3C4B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB6D7E43-680B-4EDD-BAE5-08CED7F3C4B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79CC8203-A214-46EE-9F3E-65C120000816}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79CC8203-A214-46EE-9F3E-65C120000816}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79CC8203-A214-46EE-9F3E-65C120000816}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79CC8203-A214-46EE-9F3E-65C120000816}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {95E8F3B3-49E8-400E-97A1-38D8B946DFCA}
+	EndGlobalSection
+EndGlobal

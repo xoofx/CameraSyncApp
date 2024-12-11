@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1200pt"
+   height="1200pt"
+   version="1.1"
+   viewBox="0 0 1200 1200"
+   id="svg7"
+   sodipodi:docname="CameraSyncApp.svg"
+   inkscape:export-filename="..\..\..\code\CameraSyncApp\img\CameraSyncApp.png"
+   inkscape:export-xdpi="30.72"
+   inkscape:export-ydpi="30.72"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs7" />
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="pt"
+     inkscape:zoom="0.80389202"
+     inkscape:cx="570.35023"
+     inkscape:cy="699.72084"
+     inkscape:window-width="3840"
+     inkscape:window-height="2054"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg7" />
+  <path
+     d="m600 881.26c-117.75 0-214.69-90.938-224.26-206.26h-300.74v243.74c0 51.75 42 93.75 93.75 93.75h862.5c51.75 0 93.75-42 93.75-93.75v-243.74h-300.74c-9.5625 115.31-106.5 206.26-224.26 206.26z"
+     id="path1"
+     style="fill:#0088aa" />
+  <path
+     d="m1031.3 300h-862.5c-51.75 0-93.75 42-93.75 93.75v243.74h300.74c9.5625-115.31 106.5-206.26 224.26-206.26 117.76 0 214.69 90.938 224.26 206.26h300.74v-243.74c0-51.75-42-93.75-93.75-93.75zm0 187.5c0 10.312-8.4375 18.75-18.75 18.75h-112.5c-10.312 0-18.75-8.4375-18.75-18.75v-75c0-10.312 8.4375-18.75 18.75-18.75h112.5c10.312 0 18.75 8.4375 18.75 18.75z"
+     id="path2"
+     style="fill:#d400aa" />
+  <path
+     d="m262.5 225h-56.25c-20.625 0-37.5 16.875-37.5 37.5h131.26c0-20.625-16.875-37.5-37.5-37.5z"
+     id="path3"
+     style="fill:#d40000" />
+  <path
+     d="m813.37 228.37c-6.9375-24.188-29.25-40.875-54.188-40.875h-318.37c-24.938 0-47.25 16.688-53.812 39.75l-12.188 35.25h450.37z"
+     id="path4"
+     style="fill:#808080" />
+  <path
+     d="m600 843.74c148.08 1.9688 240.37-171.89 154.87-292.87-72.047-108.66-237.74-108.66-309.74 0-85.453 120.98 6.75 294.84 154.87 292.87zm0-318.74c72.375 0 131.26 58.875 131.26 131.26-6.6094 173.86-255.94 173.81-262.5 0 0-72.375 58.875-131.26 131.26-131.26z"
+     id="path5"
+     style="fill:#00d400" />
+  <path
+     d="m600 750c123.89-3.8438 123.89-183.66 0-187.5-123.89 3.8438-123.89 183.66 0 187.5z"
+     id="path6"
+     style="fill:#ff6600" />
+  <path
+     d="m918.74 431.26h75v37.5h-75z"
+     id="path7"
+     style="fill:#ffcc00" />
+</svg>
