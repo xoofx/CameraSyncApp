@@ -16,3 +16,4 @@ jobs:
         uses: xoofx/.github/.github/actions/dotnet-releaser-action@main
         with:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+          dotnet-version: '9.0'

@@ -6,7 +6,7 @@
 
 ## 📖 Usage
 
-Install [.NET 8+ SDK](https://dotnet.microsoft.com/download) and run the following command:
+Install [.NET 9+ SDK](https://dotnet.microsoft.com/download) and run the following command:
 
 ```shell
 $ dotnet tool install -g CameraSyncApp

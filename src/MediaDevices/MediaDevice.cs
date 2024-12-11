@@ -1,4 +1,4 @@
-﻿using MediaDevices.Internal;
+using MediaDevices.Internal;
 using MediaDevices.WMDM;
 using System;
 using System.Collections.Generic;
@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 
 namespace MediaDevices
