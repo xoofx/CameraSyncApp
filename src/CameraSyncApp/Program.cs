@@ -39,25 +39,25 @@ var commandApp = new CommandApp("CameraSyncApp", "CameraSyncApp is a lightweight
                 { "o|output=", "The output {DIRECTORY}..", v => targetFolder = v },
                 { "n|name=", "The post-fix name appended to each folder created per month.", v => namePostFix = v },
                 // Action for the commit command
-                async (ctx, arguments) =>
+                (ctx, arguments) =>
                 {
                     if (targetFolder is null)
                     {
                         AnsiConsole.MarkupLine("[red]Missing --output folder option[/]");
-                        return 1;
+                        return ValueTask.FromResult(1);
                     }
 
                     if (namePostFix is null)
                     {
                         AnsiConsole.MarkupLine("[red]Missing --name option[/]");
-                        return 1;
+                        return ValueTask.FromResult(1);
                     }
 
                     var devices = MediaDevices.MediaDevice.GetDevices().ToList();
                     if (devices.Count == 0)
                     {
                         AnsiConsole.MarkupLine("[red]No devices found.[/]");
-                        return 1;
+                        return ValueTask.FromResult(1);
                     }
 
                     var keepUntil = DateTime.Now; //DateTime.Now.AddMonths(-3);
@@ -102,7 +102,7 @@ var commandApp = new CommandApp("CameraSyncApp", "CameraSyncApp is a lightweight
                             int totalCount = 0;
                             int processedCount = 0;
 
-                            await AnsiConsole.Status().StartAsync("Processing files", async statusCtx =>
+                            AnsiConsole.Status().Start("Processing files", statusCtx =>
                             {
                                 foreach (var file in files)
                                 {
@@ -129,8 +129,8 @@ var commandApp = new CommandApp("CameraSyncApp", "CameraSyncApp is a lightweight
                                         {
                                             statusCtx.Status($"Copying {file.FullName} to {dest} ({ByteSize.FromBytes(file.Length)})");
                                             {
-                                                await using var outputStream = File.Create(dest);
-                                                await file.CopyToAsync(outputStream);
+                                                using var outputStream = File.Create(dest);
+                                                file.CopyTo(outputStream);
                                             }
                                             File.SetCreationTime(dest, lastWriteTime);
                                             File.SetLastWriteTime(dest, lastWriteTime);
@@ -155,7 +155,7 @@ var commandApp = new CommandApp("CameraSyncApp", "CameraSyncApp is a lightweight
                         }
                     }
 
-                    return hasErrors ? 1 : 0;
+                    return ValueTask.FromResult(hasErrors ? 1 : 0);
                 }
             },
             new Command("list", "List devices with DCIM/Camera folders from all connected devices")

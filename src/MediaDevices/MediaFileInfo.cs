@@ -64,7 +64,7 @@ namespace MediaDevices
             }
 
             await using Stream sourceStream = Item.OpenRead();
-            await sourceStream.CopyToAsync(stream);
+            await sourceStream.CopyToAsync(stream).ConfigureAwait(false);
         }
         
         /// <summary>
